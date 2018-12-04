@@ -36,15 +36,16 @@ xs = tf.placeholder(tf.float32, [None, 1])
 #1表示只有一个特征值
 ys = tf.placeholder(tf.float32, [None, 1])
 
-# 输出层和输入层的结构是一样的；隐藏层我们可以自己假设
+#3.定义神经层：隐藏层和预测层
+# 隐藏层也有输入和输出，输出层和输入层的结构是一样的；隐藏层我们可以自己假设
 layer1 = add_layer(xs, 1, 10, activation_function=tf.nn.relu) 
 #relu函数是y=x函数，x的取值范围在[0,1]
 # Hidden layer  10个神经元
-
 prediction = add_layer(layer1, 10, 1, activation_function=None) 
-#定义输出层，此时的输入就是隐藏层的输入layer1，layer1是隐藏层，输入有10层（隐含层的输入层），输出是1
+#定义输出（预测）层，此时的输入就是隐藏层的输入layer1，layer1是隐藏层，输入有10层（隐含层的输入层），输出是1
 # Output layer
 
+#4.定义loss
 # 计算预测值prediction和真实值的误差，对二者差的平方求和再取平均
 loss = tf.reduce_mean(tf.reduce_sum(tf.square(ys - prediction), reduction_indices=[1]))
 
@@ -57,9 +58,9 @@ init = tf.global_variables_initializer()
 ### Session Start ###
 sess = tf.Session()
 sess.run(init)
-#真正激活变量
+#真正激活变量，上面的定义都没有运算，只有运行了sess.run()才开始运算
 
-# 当运算要用到placeholder时，就需要feed_dict这个字典来指定输入
+# 当运算要用到placeholder时，就需要feed_dict这个字典来指定输入，train_step,loss都是用placeholder定义的
 for i in range(1000):
     # training
     sess.run(train_step, feed_dict={xs: x_data, ys: y_data})
